@@ -1,3 +1,7 @@
+## Output addition — 2026-11-24
+
+The current version also prints Q_RW_s_real_199, the last-replication RW-Wald statistic, before its empirical p-value. Only this final display expression and documentation changed; all calculation expressions and RNG calls remain identical. The three-output descriptions below record the initial-version verification.
+
 # Initial-version verification
 
 This repository starts with the verified calculation version from predecessor commit abf2eb2, plus documentation and comment updates to introduce random weighting consistently. Its Git history begins with one initial commit. The records below describe pre-publication preservation checks and retain original-source provenance.

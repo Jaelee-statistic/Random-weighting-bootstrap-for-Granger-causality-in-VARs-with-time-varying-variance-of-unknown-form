@@ -2,7 +2,7 @@
 
 R code for Granger causality testing in a VAR model with time-varying variance of unknown form, using random weighting (RW) to obtain the RW-Wald p-value. The ordinary Wald statistic and its chi-square p-value are reported alongside it.
 
-`original_analysis.R` is the primary reproduction script. It preserves the author's calculation order, functions, preprocessing, intermediate calculations, residual conventions, fixed-coefficient analysis, and bootstrap weight distributions and draw order. This initial version includes relative data paths, English comments, RW naming, one random weight per observation, and three main result outputs. It does not set a fixed RNG seed. Inactive plotting examples remain available.
+`original_analysis.R` is the primary reproduction script. It preserves the author's calculation order, functions, preprocessing, intermediate calculations, residual conventions, fixed-coefficient analysis, and bootstrap weight distributions and draw order. This version includes relative data paths, English comments, RW naming, one random weight per observation, and four result outputs. It does not set a fixed RNG seed. Inactive plotting examples remain available.
 
 ## Related paper
 
@@ -42,16 +42,17 @@ The analysis uses the current R random-number state without setting a seed. Each
 - Bootstrap residual covariance and information-matrix calculations, even where not used by subsequent test statistics.
 - Original matrix inversion and multiplication order, strict `>` exceedance comparisons, and division by `199` without a plus-one adjustment.
 
-The final three expressions display only `Q_s_real`, `Q_s_real_pv`, and `Q_RW_s_pvalue_real_199`. The last bootstrap statistic and all fixed-coefficient results remain calculated and available in the workspace, but are not automatically printed. Half-sample diagnostics remain available as `Omega_front` and `Omega_back`.
+The final four expressions display `Q_s_real`, `Q_s_real_pv`, `Q_RW_s_real_199`, and `Q_RW_s_pvalue_real_199`. The RW-Wald statistic is from the last (199th) random weighting replication; it is not an aggregate statistic across replications. All fixed-coefficient results remain calculated and available in the workspace, but are not automatically printed. Half-sample diagnostics remain available as `Omega_front` and `Omega_back`.
 
 ## Main results and supplementary reference results
 
-The three main outputs use the OLS estimator from the actual sample:
+The four displayed outputs are:
 
 | Object | Meaning |
 | --- | --- |
 | `Q_s_real` | Ordinary Wald test statistic |
 | `Q_s_real_pv` | Ordinary Wald p-value from the chi-square reference distribution |
+| `Q_RW_s_real_199` | RW-Wald statistic from the last (199th) random weighting replication |
 | `Q_RW_s_pvalue_real_199` | Random weighting Wald p-value from 199 replications |
 
 Results with the `_fix` suffix are supplementary reference calculations using the prespecified coefficient vector `(0.43, 0, -1.02, -0.01)`. They are not the main RW-Wald inference results and do not represent a separately estimated model.

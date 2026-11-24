@@ -1,5 +1,5 @@
 # PRIMARY REPRODUCTION SCRIPT
-# Initial version: per-observation random weighting, RW names, and three main results.
+# Initial version: per-observation random weighting, RW names, and four displayed results.
 # Run from the repository root; see README.md for packages and execution.
 # Original comments are translated into English; inactive plotting code is retained.
 
@@ -396,7 +396,8 @@ Q_RW_s_pvalue_real_199     <- sum(Q_wald_RW_real_199)/rep_RW_199
 Q_RW_s_pvalue_real_199_fix <- sum(Q_wald_RW_real_199_fix)/rep_RW_199
 
 
-# Display the three main Wald and RW-Wald results.
+# Display the Wald results and the last-replication RW-Wald statistic with its empirical p-value.
 Q_s_real
 Q_s_real_pv
+Q_RW_s_real_199
 Q_RW_s_pvalue_real_199
