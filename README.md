@@ -1,0 +1,73 @@
+# RW Granger causality test
+
+R code for Granger causality testing in a VAR model with time-varying variance of unknown form, using random weighting (RW) to obtain the RW-Wald p-value. The ordinary Wald statistic and its chi-square p-value are reported alongside it.
+
+`original_analysis.R` is the primary reproduction script. It preserves the author's calculation order, functions, preprocessing, intermediate calculations, residual conventions, fixed-coefficient analysis, and bootstrap weight distributions and draw order. This initial version includes relative data paths, English comments, RW naming, one random weight per observation, and three main result outputs. It does not set a fixed RNG seed. Inactive plotting examples remain available.
+
+## Related paper
+
+This repository provides the empirical analysis code used in the author's paper:
+
+**[Random-weighting bootstrap correction for Granger causality tests in VAR models with time-varying variance of unknown form (2026)](https://www.sciencedirect.com/science/article/abs/pii/S016517652600234X?via%3Dihub)**
+
+The primary script, `original_analysis.R`, contains the empirical analysis code used in this study.
+
+## Run
+
+Open a fresh R session with this repository as the working directory. The original program clears the workspace. Install its original dependencies once:
+
+```sh
+Rscript --vanilla install_packages.R
+Rscript --vanilla run.R
+```
+
+Alternatively, in R from the repository root:
+
+```r
+source("original_analysis.R", echo = TRUE, encoding = "UTF-8")
+```
+
+The wrapper echoes the original expressions so the final results are visible. It does not replace the analysis with functions or change its calculations. Package installation is separate from the analysis. All 19 original imports remain, including packages not directly used by the final statistics. Internet access and, depending on platform/package availability, build tools may be needed for installation.
+
+## Preserved behavior
+
+The analysis uses the current R random-number state without setting a seed. Each run draws new bootstrap weights, so bootstrap statistics and p-values can vary. To repeat the same draws, call `set.seed()` with your chosen seed before sourcing the script in R.
+
+- `199` replications, sample size `175`, VAR order `1`, and original initial zero lag row.
+- Original date conversion, sorting, numeric-column differencing, NA removal, merge, and positional construction of the model matrix.
+- Original untransposed fitted-value multiplication in both OLS and bootstrap calculations. No transpose correction is applied.
+- First-half and second-half residual means and covariance matrices, with their original loops and divisors.
+- Full fixed coefficient vector `(0.43, 0, -1.02, -0.01)` and its separate statistics.
+- Two-point random draw followed by exponential draw at every observation, including the unused two-point weights.
+- Bootstrap residual covariance and information-matrix calculations, even where not used by subsequent test statistics.
+- Original matrix inversion and multiplication order, strict `>` exceedance comparisons, and division by `199` without a plus-one adjustment.
+
+The final three expressions display only `Q_s_real`, `Q_s_real_pv`, and `Q_RW_s_pvalue_real_199`. The last bootstrap statistic and all fixed-coefficient results remain calculated and available in the workspace, but are not automatically printed. Half-sample diagnostics remain available as `Omega_front` and `Omega_back`.
+
+## Main results and supplementary reference results
+
+The three main outputs use the OLS estimator from the actual sample:
+
+| Object | Meaning |
+| --- | --- |
+| `Q_s_real` | Ordinary Wald test statistic |
+| `Q_s_real_pv` | Ordinary Wald p-value from the chi-square reference distribution |
+| `Q_RW_s_pvalue_real_199` | Random weighting Wald p-value from 199 replications |
+
+Results with the `_fix` suffix are supplementary reference calculations using the prespecified coefficient vector `(0.43, 0, -1.02, -0.01)`. They are not the main RW-Wald inference results and do not represent a separately estimated model.
+
+The implementation uses RW (random weighting) terminology and generates one weight per observation, with no block-size setting or block index calculations. Each unused two-point draw still precedes its exponential draw; the distributions, selected exponential weights, formulas, and RNG stream are preserved.
+
+## Data
+
+`data/bopbm_rawdata_2.txt` and `data/bopbsv_rawdata_2.txt` are byte-for-byte copies of the supplied attachments; only attachment filename suffixes were removed. No dates, values, delimiters, or line endings were rewritten. SHA-256 hashes are recorded in `data/SHA256SUMS`. Use these supplied snapshots for reproduction rather than downloading updated series.
+
+The original script's private absolute paths have been replaced with `data/...`. Inactive plot examples use local `plot_1.png` through `plot_4.png` paths. Plotting remains commented out as in the original.
+
+## Earlier condensed implementation
+
+An earlier condensed implementation is retained under `archive/condensed/` for history. It is **not the primary reproduction script**. That implementation refactors the original and includes a `transpose_corrected` branch; it omits original intermediate calculations. Its README, tests, and saved results refer only to that archived implementation. To inspect its old commands, first change the working directory to `archive/condensed/`.
+
+## Verification
+
+See `VERIFICATION.md` for the checks and their scope. To compare bootstrap outputs with the original script, use a common initial RNG state and the same R and package environment. The preservation comparison passed for all 79 retained calculation objects, all generated weights, and all iteration-end and final RNG states in R 4.6.0. This establishes computational preservation in the tested environment; it is not an independent comparison with the published table.
