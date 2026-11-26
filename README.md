@@ -1,4 +1,4 @@
-# RW Granger causality test
+# Random Weighting Bootstrap Granger causality test
 
 R code for Granger causality testing in a VAR model with time-varying variance of unknown form, using random weighting (RW) to obtain the RW-Wald p-value. The ordinary Wald statistic and its chi-square p-value are reported alongside it.
 
